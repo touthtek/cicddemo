@@ -35,6 +35,20 @@ app.MapGet("/weatherforecast", () =>
 })
 .WithName("GetWeatherForecast");
 
+
+app.MapGet("/weatherforecast/{temp}", (int temp) =>
+{
+    var forecast = Enumerable.Range(1, 5).Select(index =>
+       new WeatherForecast
+       (
+           DateTime.Now.AddDays(index),
+           Random.Shared.Next(-20, 55),
+           summaries[Random.Shared.Next(summaries.Length)]
+       )).ToArray();
+    return forecast.Where(f => f.TemperatureC>temp).ToArray();
+})
+.WithName("GetWeatherForecastBytemprature");
+
 app.Run();
 
 internal record WeatherForecast(DateTime Date, int TemperatureC, string? Summary)
